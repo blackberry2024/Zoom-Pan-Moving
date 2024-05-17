@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="zoompan.js"></script>
+    <style>
+        #background {
+            width: 100%; height: 100%; position: absolute;
+            top: 0; left: 0; background: url('images/p_0007_background.png') no-repeat center center / cover;
+        }
+        .button {
+            position: absolute; width: 296px; height: 115px; cursor: pointer;
+            background-size: cover; transition: transform 0.3s;
+        }
+        #button1 { background-image: url('images/p_0002_button1.png'); left: 10%; top: 10%; }
+        #button2 { background-image: url('images/p_0003_button2.png'); left: 30%; top: 10%; }
+        #button3 { background-image: url('images/p_0004_button3.png'); left: 50%; top: 10%; }
+        #button4 { background-image: url('images/p_0005_button4.png'); left: 70%; top: 10%; }
+        #button5 { background-image: url('images/p_0006_button5.png'); left: 90%; top: 10%; }
+
+        #background-tint, #close {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        #close {
+            width: 48px; height: 66.5px; background: url('images/p_0000_x-close.png') no-repeat center / cover;
+            right: 20px; top: 20px; cursor: pointer;
+        }
+
+        .overlay {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 80%; height: 80%; background: white;
+            padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); overflow: hidden;
+        }
+        .zoomable-image { position: relative; width: 100%; height: 100%; overflow: hidden; }
+        .zoomable-image img { width: 100%; transition: transform 0.3s ease-out; }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div id="button1" class="button"></div>
+    <div id="button2" class="button"></div>
+    <div id="button3" class="button"></div>
+    <div id="button4" class="button"></div>
+    <div id="button5" class="button"></div>
+
+    <div id="background-tint"></div>
+    <div id="overlay1" class="overlay"><div id="zoomable-image1"><img src="images/ASTRIDE-Poster.webp"></div></div>
+    <div id="close"></div>
+
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.button');
+            const overlays = document.querySelectorAll('.overlay');
+            const backgroundTint = document.getElementById('background-tint');
+            const closeBtn = document.getElementById('close');
+
+            buttons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    showOverlay(index + 1);
+                });
+            });
+
+            closeBtn.addEventListener('click', closeOverlays);
+            backgroundTint.addEventListener('click', closeOverlays);
+
+            function showOverlay(index) {
+                closeOverlays();
+                overlays[index - 1].style.display = 'block';
+                backgroundTint.style.display = 'block';
+                closeBtn.style.display = 'block';
+            }
+
+            function closeOverlays() {
+                overlays.forEach(overlay => overlay.style.display = 'none');
+                backgroundTint.style.display = 'none';
+                closeBtn.style.display = 'none';
+            }
+
+            const zoomableImages = document.querySelectorAll('.zoomable-image img');
+            zoomableImages.forEach(img => {
+
+            });
+
+            function getDistance(touch1, touch2) {
+                const dx = touch1.pageX - touch2.pageX;
+                const dy = touch1.pageY - touch2.pageY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            function getMidpoint(touch1, touch2) {
+                return {
+                    x: (touch1.pageX + touch2.pageX) / 2,
+                    y: (touch1.pageY + touch2.pageY) / 2
+                };
+            }
+        });
+    </script>
+</body>
+</html>

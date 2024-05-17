@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <style>
+      #background {
+        width: 1366px;
+        height: 1024px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background: url(images/p_0007_background.png);
+        background-size: 1366px 1024px;
+      }
+      #button5 {
+        width: 296px;
+        height: 115px;
+        position: absolute;
+        top: 542.5px;
+        left: 698.5px;
+        background: url(images/p_0006_button5.png);
+        background-size: 296px 115px;
+        cursor: pointer;
+      }
+      #button4 {
+        width: 296px;
+        height: 115px;
+        position: absolute;
+        top: 543px;
+        left: 372.5px;
+        background: url(images/p_0005_button4.png);
+        background-size: 296px 115px;
+        cursor: pointer;
+      }
+      #button3 {
+        width: 294px;
+        height: 114px;
+        position: absolute;
+        top: 401px;
+        left: 858.5px;
+        background: url(images/p_0004_button3.png);
+        background-size: 294px 114px;
+        cursor: pointer;
+      }
+      #button2 {
+        width: 294.5px;
+        height: 112.5px;
+        position: absolute;
+        top: 402px;
+        left: 536.5px;
+        background: url(images/p_0003_button2.png);
+        background-size: 294.5px 112.5px;
+        cursor: pointer;
+      }
+      #button1 {
+        width: 298px;
+        height: 118px;
+        position: absolute;
+        top: 397.5px;
+        left: 211px;
+        background: url(images/p_0002_button1.png);
+        background-size: 298px 118px;
+        cursor: pointer;
+      }
+      #background-tint {
+        width: 1366px;
+        height: 1024px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background: url(images/p_0001_background-tint.png);
+        background-size: 1366px 1024px;
+        display: none;
+      }
+      #close {
+        width: 48px;
+        height: 66.5px;
+        position: absolute;
+        top: 28.5px;
+        left: 1279.5px;
+        background: url(images/p_0000_x-close.png);
+        background-size: 48px 66.5px;
+        cursor: pointer;
+        display: none;
+      }
+    </style>
+    <style>
+      /* Other styles remain the same */
+      .overlay {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        background: white;
+        padding: 20px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+        overflow: hidden; /* Hide browser scrollbars */
+      }
+
+      #overlay2,
+      #overlay3 {
+        padding: 0;
+        width: calc(100vw - 30px);
+        height: calc(108 / 192 * 100vw - 18px);
+        top: 55%;
+      }
+
+      .zoomable-image {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .overlay video,
+      .overlay img {
+        width: 100%;
+        height: auto;
+      }
+
+      /*.overlay .zoomable-image img{width:auto; height:auto;}*/
+
+      .overlay.scrollable {
+        overflow-y: scroll;
+      }
+    </style>
+    <script src="./js/renderer.js"></script>
+    <script src="./js/preview.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("overlay4");
+        const image = document.getElementById("zoomable-image1");
+        addZoomPan({ container, image });
+
+        const buttons = document.querySelectorAll(
+          "#button1, #button2, #button3, #button4, #button5"
+        );
+        const backgroundTint = document.getElementById("background-tint");
+        const closeBtn = document.getElementById("close");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const buttonId = this.id.replace("button", "");
+            showOverlay(buttonId);
+          });
+        });
+
+        closeBtn.addEventListener("click", closeOverlays);
+        backgroundTint.addEventListener("click", closeOverlays);
+
+        function showOverlay(buttonId) {
+          closeOverlays();
+          const targetOverlay = document.getElementById("overlay" + buttonId);
+          targetOverlay.style.display = "block";
+          backgroundTint.style.display = "block";
+          closeBtn.style.display = "block";
+
+          if (targetOverlay.classList.contains("video")) {
+            const video = targetOverlay.querySelector("video");
+            video.play();
+          }
+        }
+
+        function closeOverlays() {
+          backgroundTint.style.display = "none";
+          closeBtn.style.display = "none";
+          const allOverlays = document.querySelectorAll(".overlay");
+          allOverlays.forEach((overlay) => {
+            overlay.style.display = "none"; // Hide all overlays
+            if (overlay.classList.contains("video")) {
+              const video = overlay.querySelector("video");
+              video.pause();
+              video.currentTime = 0;
+            }
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="background"></div>
+    <div id="button5"></div>
+    <div id="button4"></div>
+    <div id="button3"></div>
+    <div id="button2"></div>
+    <div id="button1"></div>
+    <div id="background-tint"></div>
+    <div id="overlay1" class="overlay video">
+      <video controls><source /></video>
+    </div>
+    <div id="overlay2" class="overlay video">
+      <video controls>
+        <source src="video/the-balancing-act-compressed.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div id="overlay3" class="overlay scrollable">
+      <img src="images/jama-1.webp" /><img src="images/jama-2.webp" /><img
+        src="images/jama-3.webp"
+      /><img src="images/jama-4.webp" /><img src="images/jama-5.webp" /><img
+        src="images/jama-6.webp"
+      /><img src="images/jama-7.webp" /><img src="images/jama-8.webp" /><img
+        src="images/jama-9.webp"
+      /><img src="images/jama-10.webp" />
+    </div>
+    <div id="overlay4" class="overlay">
+      <div id="zoomable-image1" class="zoomable-image">
+        <img src="images/ASTRIDE-Poster.webp" />
+      </div>
+    </div>
+    <div id="overlay5" class="overlay scrollable">
+      <img src="images/astride-clinical-trials.webp" />
+    </div>
+    <div id="close"></div>
+  </body>
+</html>
